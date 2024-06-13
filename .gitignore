@@ -1,0 +1,8 @@
+media/images/*
+media/file-resume/*
+media/profile_photos/*
+
+
+venv/
+db.sqlite3
+.idea/

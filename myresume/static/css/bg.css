@@ -1,0 +1,59 @@
+/* 
+/* 
+	Section Background (bg.css)
+	
+	Table of Content
+	- general settings for section & subheader
+	- background settings for section
+	- media query
+/*
+
+
+/* background settings for section */
+#section-hero {background:url(../images/background/1.jpg) fixed;}
+#section-hero-2 {background:url(../images/background/5.jpg) fixed;}
+#section-hero-3 {background:url(../images/background/6.jpg) fixed;}
+#section-hero-4 {background:url(../images/background/7.jpg) fixed;}
+#section-hero-5 {background:url(../images/background/8.jpg) fixed;}
+#section-hero-6 {background:url(../images/background/10.jpg) fixed;}
+#section-hero-7 {background:url(../images/background/12.jpg) fixed;}
+#section-services {background:url(../images/background/2.jpg) fixed;}
+#section-experiences {background:url(../images/background/3.jpg) fixed;}
+#section-contact {background:url(../images/background/4.jpg) fixed;}
+#section-services.index-2 {background:url(../images/background/5a.jpg) fixed;}
+#section-experiences.index-2 {background:url(../images/background/5b.jpg) fixed;}
+#section-services.index-4 {background:url(../images/background/6a.jpg) fixed;}
+#section-experiences.index-4 {background:url(../images/background/6b.jpg) fixed;}
+#section-testimonial.index-4 {background:url(../images/background/6c.jpg) fixed;}
+#section-testimonial.index-8 {background:url(../images/background/13.jpg) fixed;}
+#section-services.index-5 {background:url(../images/background/7a.jpg) fixed;}
+#section-experiences.index-5 {background:url(../images/background/7b.jpg) fixed;}
+#section-services.index-6 {background:url(../images/background/8.jpg) fixed;}
+#section-services.index-7 {background:url(../images/background/11.jpg) fixed;}
+#section-experiences.index-6 {background:url(../images/background/8.jpg) fixed;}
+#section-contact.index-6 {background:url(../images/background/8.jpg) fixed;}
+#section-about.side-bg .background-image{background:url(../images/background/s1.jpg);}
+body.custom-bg-1{background:none;}
+#section-about.index-8.side-bg .background-image{background:url(../images/background/s2.jpg);}
+
+
+section{
+-moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position:center center;
+    background-attachment:fixed;
+}
+
+/* media query */
+@media only screen and (max-width: 767px) {
+	section{
+	-webkit-background-size: auto 100% !important;
+	-moz-background-size: auto 100% !important;
+	-o-background-size: auto 100% !important;
+	background-size: auto 100% !important;
+	background-attachment:scroll !important;
+	background-position:top !important;
+	}
+}

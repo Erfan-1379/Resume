@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title_content %}{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{% static "images/background/3.jpg" %}');
+            background-size: cover;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .dashboard-container {
+            max-width: 800px;
+            padding: 20px;
+            border: 2px solid #6c757d;
+            border-radius: 0.5rem;
+            background-color: rgba(69, 77, 85, 0.8);
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5);
+            animation: fadeIn 2s;
+            margin: auto;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .dashboard-container h1.dashboard-title {
+            position: relative;
+            margin-top: 10px;
+            margin-bottom: 20px; /* Added margin-bottom */
+            text-align: center;
+            font-size: 2em;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073;
+            }
+            to {
+                text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6;
+            }
+        }
+
+        .btn-primary-base {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: all 0.5s;
+        }
+
+        .btn-primary-base:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .dropdown-menu {
+            transform: scale(0);
+            transform-origin: top right;
+            transition: transform 0.3s ease-out;
+            opacity: 0;
+            background-color: #add8e6; /* Light blue color */
+            border-radius: 10px; /* This will give the dropdown a rounded corner */
+        }
+
+        .dropdown.show .dropdown-menu {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .dropdown-item {
+            color: #000; /* Change this to your preferred text color */
+        }
+
+        .dropdown-item:hover {
+            color: #fff; /* Change this to your preferred hover text color */
+            background-color: #1e90ff; /* Change this to your preferred hover background color */
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center">
+<div class="dashboard-container animate__animated animate__fadeIn">
+    <h1 class="dashboard-title">Dashboard</h1> <!-- Added class "dashboard-title" -->
+    <div class="row justify-content-center">
+        {% block content %}
+            {% for model in models %}
+                <div class="col-md-4 mb-4">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ model.name }}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{{ model.add_url }}">Add {{ model.name }}</a>
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Edit {{ model.name }}</h6>
+                            {% for instance in model.instances %}
+                                <a class="dropdown-item"
+                                   href="{{ instance.edit_url }}">ID: {{ instance.title|truncatewords:15 }}</a>
+                            {% endfor %}
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Delete {{ model.name }}</h6>
+                            {% for instance in model.instances %}
+                                <a class="dropdown-item"
+                                   href="{{ instance.delete_url }}">ID: {{ instance.title|truncatewords:15 }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        {% endblock %}
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+
+        $('.dropdown-menu').on('click', function (event) {
+            event.stopPropagation();
+        });
+    });
+</script>
+
+</body>
+</html>
