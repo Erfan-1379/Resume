@@ -1,8 +1,14 @@
+# Ignore all files in media directories
 media/images/*
 media/file-resume/*
 media/profile_photos/*
 
+# Do not ignore the .gitkeep files
+!media/images/.gitkeep
+!media/file-resume/.gitkeep
+!media/profile_photos/.gitkeep
 
+# Ignore other files and directories
 venv/
 db.sqlite3
 .idea/
