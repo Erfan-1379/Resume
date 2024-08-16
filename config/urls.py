@@ -21,8 +21,14 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('professions/', include('myresume.urls')),
+    path('', include('myresume.urls')),
+    path('auth/', include('django.contrib.auth.urls')),
+    path('auth/', include('core.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+handler404 = 'myresume.views.custom_404_view'

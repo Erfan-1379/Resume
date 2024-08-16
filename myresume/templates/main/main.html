@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
     <!-- background -->
     <link rel="stylesheet" href="{% static 'css/bg.css' %}" type="text/css">
@@ -53,6 +55,39 @@
         {#                </div>#}
         {#            </div>#}
         {#        </div>#}
+        {#        <div class="info">#}
+        {#            <div class="container">#}
+        {#                <div class="row">#}
+        {#                    <div class="col-md-45">#}
+        {#                        {% if request.user.is_authenticated %}#}
+        {#                            <div class="col"><span class="id-color"></span>#}
+        {#                                {% if request.user.is_superuser %}#}
+        {#                                    <b>Hi, {{ request.user.first_name }}! welcome home ;)</b>#}
+        {#                                    <li>#}
+        {#                                        <a href="{% url 'admin' %}">Your Panel</a>#}
+        {#                                    </li>#}
+        {#                                {% else %}#}
+        {#                                    Hi, {{ request.user.first_name }}! welcome to my site ;)#}
+        {#                                {% endif %}#}
+        {#                            </div>#}
+        {#                            <form method="POST" action="{% url 'logout' %}">#}
+        {#                                {% csrf_token %}#}
+        {#                                <li>#}
+        {#                                    <button type="submit" class="btn btn-link"#}
+        {#                                            style="padding: 0; border: none; background: none; color: inherit;">#}
+        {#                                        Logout#}
+        {#                                    </button>#}
+        {#                                </li>#}
+        {#                            </form>#}
+        {#                        {% else %}#}
+        {#                            <li><a href="{% url 'login' %}">Login</a></li>#}
+        {#                            <li><a href="{% url 'signup' %}">Sign Up</a></li>#}
+        {#                        {% endif %}#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+
 
         <div class="container">
             <div class="row">
@@ -72,6 +107,38 @@
                     <!-- mainmenu begin -->
                     <nav>
                         <ul id="mainmenu">
+                            {% if request.user.is_authenticated %}
+                                <li>
+                                    {% if request.user.is_superuser %}
+                                        <b>Hi, {{ request.user.first_name }}! welcome home ;)</b>
+                                        <br>
+                                        <a href="{% url 'admin' %}">Your Panel</a>
+                                    {% else %}
+                                        Hi, {{ request.user.first_name }}! welcome to my site ;)
+                                    {% endif %}
+                                    <form method="POST" action="{% url 'logout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-link"
+                                                style="padding: 0; border: none; background: none; color: red;">
+                                            Logout
+                                        </button>
+                                    </form>
+                                    <br>
+                                </li>
+                            {% else %}
+{#                                <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign Up</a>#}
+                                <button type="submit" class="btn btn-link"
+                                        style="padding: 0; border: none; background: none; color: #ffb736;"
+                                        onclick="window.location.href='{% url 'login' %}'">Login
+                                </button>
+                                <span style="margin: 0 5px;">|</span>
+                                <button type="submit" class="btn btn-link"
+                                        style="padding: 0; border: none; background: none; color: #ffb736;"
+                                        onclick="window.location.href='{% url 'signup' %}'">Sign Up
+                                </button>
+                                <br>
+                                <br>
+                            {% endif %}
                             <li><a class="active" href="#top">Home<span></span></a></li>
                             <li><a href="#section-about">About<span></span></a></li>
                             <li><a href="#section-services">Services<span></span></a></li>
@@ -124,28 +191,28 @@
                 <div class="row">
                     <div class="col-md-3 wow fadeIn" data-wow-delay="0">
                         <div class="de_count">
-                            <h3 class="timer" data-to="8240" data-speed="2500">0</h3>
+                            <h3 class="timer" data-to="850" data-speed="2500">0</h3>
                             <span>Hours of Works</span>
                         </div>
                     </div>
 
                     <div class="col-md-3 wow fadeIn" data-wow-delay=".25s">
                         <div class="de_count">
-                            <h3 class="timer" data-to="315" data-speed="2500">0</h3>
+                            <h3 class="timer" data-to="10" data-speed="2500">0</h3>
                             <span>Projects Done</span>
                         </div>
                     </div>
 
                     <div class="col-md-3 wow fadeIn" data-wow-delay=".5s">
                         <div class="de_count">
-                            <h3 class="timer" data-to="250" data-speed="2500">0</h3>
+                            <h3 class="timer" data-to="5" data-speed="2500">0</h3>
                             <span>Satisfied Customers</span>
                         </div>
                     </div>
 
                     <div class="col-md-3 wow fadeIn" data-wow-delay=".75s">
                         <div class="de_count">
-                            <h3 class="timer" data-to="32" data-speed="2500">0</h3>
+                            <h3 class="timer" data-to="5" data-speed="2500">0</h3>
                             <span>Awards Winning</span>
                         </div>
                     </div>
@@ -318,79 +385,89 @@
         </section>
         <!-- section close -->
 
-        <!-- section begin -->
-        <section id="section-testimonial" class="text-light" data-bgcolor="#252525">
+        {#        <!-- section begin -->#}
+        {#        <section id="section-testimonial" class="text-light" data-bgcolor="#252525">#}
+        {#            <div class="container">#}
+        {##}
+        {#                <div class="row">#}
+        {#                    <div class="col-md-12 text-center">#}
+        {#                        <h5><span class="id-color">Testimonials</span></h5>#}
+        {#                        <h2>What They Says</h2>#}
+        {#                    </div>#}
+        {##}
+        {##}
+        {#                    <div id="testimonial-carousel" class="de_carousel sequence" data-wow-delay=".3s">#}
+        {##}
+        {#                        <div class="col-md-6 item sq-item wow">#}
+        {#                            <div class="de_testi opt-2">#}
+        {#                                <blockquote>#}
+        {#                                    <div class="de_testi_by">#}
+        {#                                        <img src="{% static 'images/people/1.jpg' %}" class="img-circle" alt="">#}
+        {#                                        <span>John, Pixar Studio</span>#}
+        {#                                    </div>#}
+        {#                                    <p>"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,#}
+        {#                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et#}
+        {#                                        dolore"</p>#}
+        {#                                </blockquote>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {##}
+        {#                        <div class="col-md-6 item sq-item wow">#}
+        {#                            <div class="de_testi opt-2">#}
+        {#                                <blockquote>#}
+        {#                                    <div class="de_testi_by">#}
+        {#                                        <img src="{% static 'images/people/2.jpg' %}" class="img-circle" alt="">#}
+        {#                                        <span>Sarah, Microsoft</span>#}
+        {#                                    </div>#}
+        {#                                    <p>"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,#}
+        {#                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et#}
+        {#                                        dolore"</p>#}
+        {#                                </blockquote>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {##}
+        {#                        <div class="col-md-6 item sq-item wow">#}
+        {#                            <div class="de_testi opt-2">#}
+        {#                                <blockquote>#}
+        {#                                    <div class="de_testi_by">#}
+        {#                                        <img src="{% static 'images/people/3.jpg' %}" class="img-circle" alt="">#}
+        {#                                        <span>Michael, Apple</span>#}
+        {#                                    </div>#}
+        {#                                    <p>"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,#}
+        {#                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et#}
+        {#                                        dolore"</p>#}
+        {#                                </blockquote>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {##}
+        {#                        <div class="col-md-6 item sq-item wow">#}
+        {#                            <div class="de_testi opt-2">#}
+        {#                                <blockquote>#}
+        {#                                    <div class="de_testi_by">#}
+        {#                                        <img src="{% static 'images/people/4.jpg' %}" class="img-circle" alt="">#}
+        {#                                        <span>Thomas, Samsung</span>#}
+        {#                                    </div>#}
+        {#                                    <p>"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,#}
+        {#                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et#}
+        {#                                        dolore"</p>#}
+        {#                                </blockquote>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </section>#}
+        {#        <!-- section close -->#}
+        <section id="section-testimonial-coming-soon" class="text-light" data-bgcolor="#252525">
             <div class="container">
-
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h5><span class="id-color">Testimonials</span></h5>
-                        <h2>What They Says</h2>
-                    </div>
-
-
-                    <div id="testimonial-carousel" class="de_carousel sequence" data-wow-delay=".3s">
-
-                        <div class="col-md-6 item sq-item wow">
-                            <div class="de_testi opt-2">
-                                <blockquote>
-                                    <div class="de_testi_by">
-                                        <img src="{% static 'images/people/1.jpg' %}" class="img-circle" alt="">
-                                        <span>John, Pixar Studio</span>
-                                    </div>
-                                    <p>"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et
-                                        dolore"</p>
-                                </blockquote>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 item sq-item wow">
-                            <div class="de_testi opt-2">
-                                <blockquote>
-                                    <div class="de_testi_by">
-                                        <img src="{% static 'images/people/2.jpg' %}" class="img-circle" alt="">
-                                        <span>Sarah, Microsoft</span>
-                                    </div>
-                                    <p>"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et
-                                        dolore"</p>
-                                </blockquote>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 item sq-item wow">
-                            <div class="de_testi opt-2">
-                                <blockquote>
-                                    <div class="de_testi_by">
-                                        <img src="{% static 'images/people/3.jpg' %}" class="img-circle" alt="">
-                                        <span>Michael, Apple</span>
-                                    </div>
-                                    <p>"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et
-                                        dolore"</p>
-                                </blockquote>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 item sq-item wow">
-                            <div class="de_testi opt-2">
-                                <blockquote>
-                                    <div class="de_testi_by">
-                                        <img src="{% static 'images/people/4.jpg' %}" class="img-circle" alt="">
-                                        <span>Thomas, Samsung</span>
-                                    </div>
-                                    <p>"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et
-                                        dolore"</p>
-                                </blockquote>
-                            </div>
-                        </div>
+                        <h2>Testimonials Section - Coming Soon!</h2>
+                        <p>We're working hard to bring you some awesome testimonials. Stay tuned!</p>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- section close -->
 
         <!-- section begin -->
         <section id="section-contact" class="text-light no-top no-bottom index-6" data-stellar-background-ratio=".2">
@@ -405,51 +482,49 @@
 
                             <div class="col-md-8 col-md-offset-2 wow fadeInUp">
                                 <div class="row">
-                                    <form name="contactForm" id='contact_form' class="s2" method="post"
-                                          action='../Profession/HTML/email.php'>
+                                    <form name="contactForm" id="contact_form" class="s2" method="post"
+                                          action="{% url 'home' %}">
+                                        {% csrf_token %}
                                         <div class="col-md-6">
                                             <div class="field-set">
-                                                <input type='text' name='name' id='name' class="form-control"
+                                                <input type="text" name="name" id="name" class="form-control"
                                                        placeholder="Your Name">
                                                 <div class="line-fx"></div>
                                             </div>
-
                                             <div class="field-set">
-                                                <input type='text' name='email' id='email' class="form-control"
+                                                <input type="email" name="email" id="email" class="form-control"
                                                        placeholder="Your Email">
                                                 <div class="line-fx"></div>
                                             </div>
-
                                             <div class="field-set">
-                                                <input type='text' name='phone' id='phone' class="form-control"
+                                                <input type="text" name="phone" id="phone" class="form-control"
                                                        placeholder="Your Phone">
                                                 <div class="line-fx"></div>
                                             </div>
                                         </div>
-
                                         <div class="col-md-6">
                                             <div class="field-set">
-                                                <textarea name='message' id='message' class="form-control"
+                                                <textarea name="message" id="message" class="form-control"
                                                           placeholder="Your Message"></textarea>
                                                 <div class="line-fx"></div>
                                             </div>
                                         </div>
-
                                         <div class="spacer-single"></div>
-
                                         <div class="col-md-12 text-center">
-                                            <div id='submit'>
-                                                <input type='submit' id='send_message' value='Submit Form'
+                                            <div id="submit">
+                                                <input type="submit" id="send_message" value="Submit Form"
                                                        class="btn btn-custom">
                                             </div>
-                                            <div id='mail_success' class='success'>Your message has been sent
-                                                successfully.
+                                            <div id="mail_success" class="success" style="display:none;">Your message
+                                                has been sent successfully.
                                             </div>
-                                            <div id='mail_fail' class='error'>Sorry, error occured this time sending
-                                                your message.
+                                            <div id="mail_fail" class="error" style="display:none;">Sorry, error
+                                                occurred this time sending your message.
                                             </div>
                                         </div>
                                     </form>
+
+
                                 </div>
 
                                 <div class="spacer-double"></div>
@@ -470,7 +545,6 @@
                                     </div>
 
                                     <div class="col-md-4">
-
                                         <div class="wm-1"></div>
                                         <i class="icon_mail_alt id-color size40 mb20"></i>
                                         <h6 class="id-color">Email Us</h6>
@@ -484,9 +558,8 @@
                 </div>
             </div>
         </section>
-
     </div>
-    <!-- content close -->
+    <!-- section close -->
 
     <!-- footer begin -->
     <footer>
@@ -494,12 +567,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="social-icons big">
-                        <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
-                        <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
-                        <a href="#"><i class="fa fa-rss fa-lg"></i></a>
-                        <a href="#"><i class="fa fa-google-plus fa-lg"></i></a>
-                        <a href="#"><i class="fa fa-skype fa-lg"></i></a>
-                        <a href="#"><i class="fa fa-dribbble fa-lg"></i></a>
+                        {% for link in social_medias.all %}
+                            {% if link.url %}
+                                <a href="{{ link.url }}"><i class="fa fa-{{ link.platform }} fa-lg"></i></a>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -509,7 +581,7 @@
             <div class="container text-center">
                 <div class="row">
                     <div class="col-md-12">
-                        Erfan Yaghoblo
+                        Erfan Yaghoblo - 2024
                     </div>
                 </div>
             </div>

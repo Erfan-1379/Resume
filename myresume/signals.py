@@ -1,8 +1,10 @@
-from django.db.models.signals import pre_delete, pre_save
+from decouple import config
+from django.core.mail import send_mail
+from django.db.models.signals import pre_delete, pre_save, post_save
 from django.dispatch import receiver
 import os
 
-from myresume.models import Portfolio, AboutMe
+from myresume.models import Portfolio, AboutMe, Contact
 
 
 def delete_file(path):
@@ -37,3 +39,14 @@ def update_instance_files(sender, instance, **kwargs):
         elif sender == Portfolio:
             if old_instance.image_project and instance.image_project != old_instance.image_project:
                 delete_file(old_instance.image_project.path)
+
+
+@receiver(post_save, sender=Contact)
+def send_contact_email(sender, instance, **kwargs):
+    message = f'Name: {instance.name}\nEmail: {instance.email}\nPhone: {instance.phone} \n\n{instance.message}'
+    send_mail(
+        f'New contact message from {instance.name}',
+        message,
+        instance.email,
+        [config('EMAIL_RECIPIENT_LIST')],
+    )

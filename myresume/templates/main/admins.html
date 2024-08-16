@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title_content %}{% endblock %}</title>
+    <title>{% block title_content %}Admin Page{% endblock %}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
@@ -42,7 +42,7 @@
         .dashboard-container h1.dashboard-title {
             position: relative;
             margin-top: 10px;
-            margin-bottom: 20px; /* Added margin-bottom */
+            margin-bottom: 20px;
             text-align: center;
             font-size: 2em;
             color: #fff;
@@ -75,8 +75,8 @@
             transform-origin: top right;
             transition: transform 0.3s ease-out;
             opacity: 0;
-            background-color: #add8e6; /* Light blue color */
-            border-radius: 10px; /* This will give the dropdown a rounded corner */
+            background-color: #add8e6;
+            border-radius: 10px;
         }
 
         .dropdown.show .dropdown-menu {
@@ -85,18 +85,18 @@
         }
 
         .dropdown-item {
-            color: #000; /* Change this to your preferred text color */
+            color: #000;
         }
 
         .dropdown-item:hover {
-            color: #fff; /* Change this to your preferred hover text color */
-            background-color: #1e90ff; /* Change this to your preferred hover background color */
+            color: #fff;
+            background-color: #1e90ff;
         }
     </style>
 </head>
 <body class="d-flex align-items-center">
 <div class="dashboard-container animate__animated animate__fadeIn">
-    <h1 class="dashboard-title">Dashboard</h1> <!-- Added class "dashboard-title" -->
+    <h1 class="dashboard-title">Dashboard</h1>
     <div class="row justify-content-center">
         {% block content %}
             {% for model in models %}

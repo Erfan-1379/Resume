@@ -1,0 +1,25 @@
+{% extends "parent/base.html" %}
+{% block title_content %}
+    Login Page
+{% endblock %}
+{% block before_content %}
+    "Login Page"
+{% endblock %}
+
+{% block content %}
+    <div class="form-container-base animate__animated animate__zoomIn animate__delay-0.5s">
+        <form method="post" enctype="multipart/form-data" class="animate__animated animate__fadeInUp animate__delay-1s">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit"
+                    class="btn btn-primary-base animate__animated animate__pulse animate__infinite animate__delay-2s">Submit
+            </button>
+        </form>
+        <br>
+        <li>
+            <a class="btn btn-dark" href="{% url 'signup' %}">Don't have an account? Create a new account.</a>
+        </li>
+    </div>
+{% endblock %}

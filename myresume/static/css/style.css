@@ -1876,6 +1876,43 @@ a.btn-border:hover {
 .text-light .play-button.dark:hover {
 	border: solid 5px rgba(255, 255, 255, 1);
 }
+.custom-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.custom-file-label {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid #1a8b49;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #fff;
+    background-color: #1a8b49;
+}
+
+.custom-file-label:hover {
+    background-color: #155a34;
+    border-color: #155a34;
+}
+
+.custom-file-label:active {
+    background-color: #0e3e24;
+    border-color: #0e3e24;
+}
 
 /* columns */
 

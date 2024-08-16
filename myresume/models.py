@@ -18,6 +18,7 @@ class User(models.Model):
 
 
 class Abilities(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=255, unique=True)
     percent = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
 
@@ -42,7 +43,29 @@ class AboutMe(models.Model):
         return reverse('admin')
 
 
+class SocialMedias(models.Model):
+    PLATFORM_CHOICES = [
+        ('telegram', 'Telegram'),
+        ('instagram', 'Instagram'),
+        ('linkedin', 'LinkedIn'),
+        ('twitter', 'Twitter'),
+        ('skype', 'Skype'),
+        ('github', 'GitHub')
+    ]
+
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='social_medias')
+    platform = models.CharField(max_length=50, choices=PLATFORM_CHOICES)
+    url = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.platform}'
+
+    def get_absolute_url(self):
+        return reverse('admin')
+
+
 class Services(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     title = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
@@ -57,7 +80,7 @@ class Portfolio(models.Model):
         ('django', 'Django'),
         ('php', 'PHP'),
     ]
-
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     project = models.CharField(max_length=255, null=True, blank=True)
     image_project = ResizedImageField(upload_to='images/', size=[1000, 667], crop=['middle', 'center'])
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='all_projects')
@@ -70,6 +93,7 @@ class Portfolio(models.Model):
 
 
 class Experiences(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     title = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     start_year = models.IntegerField(
@@ -89,6 +113,7 @@ class Experiences(models.Model):
 
 
 class Education(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     title = models.CharField(max_length=250, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     start_year = models.IntegerField(
@@ -105,3 +130,14 @@ class Education(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length=155)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
