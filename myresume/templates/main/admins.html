@@ -1,144 +1,211 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title_content %}Admin Page{% endblock %}</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <style>
-        body {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{% static "images/background/3.jpg" %}');
-            background-size: cover;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            align-items: center;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title_content %}پنل مدیریت{% endblock %}</title>
 
-        .dashboard-container {
-            max-width: 800px;
-            padding: 20px;
-            border: 2px solid #6c757d;
-            border-radius: 0.5rem;
-            background-color: rgba(69, 77, 85, 0.8);
-            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5);
-            animation: fadeIn 2s;
-            margin: auto;
-        }
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
 
-        .dashboard-container h1.dashboard-title {
-            position: relative;
-            margin-top: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 2em;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073;
-            }
-            to {
-                text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6;
-            }
-        }
-
-        .btn-primary-base {
-            background-color: #007bff;
-            border-color: #007bff;
-            transition: all 0.5s;
-        }
-
-        .btn-primary-base:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-        .dropdown-menu {
-            transform: scale(0);
-            transform-origin: top right;
-            transition: transform 0.3s ease-out;
-            opacity: 0;
-            background-color: #add8e6;
-            border-radius: 10px;
-        }
-
-        .dropdown.show .dropdown-menu {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .dropdown-item {
-            color: #000;
-        }
-
-        .dropdown-item:hover {
-            color: #fff;
-            background-color: #1e90ff;
-        }
-    </style>
+  <link href="{% static 'css/admin.css' %}" rel="stylesheet">
+  <link rel="icon" type="image/png" href="{% static 'images/misc/EYY_prev_ui.png' %}">
 </head>
-<body class="d-flex align-items-center">
-<div class="dashboard-container animate__animated animate__fadeIn">
-    <h1 class="dashboard-title">Dashboard</h1>
-    <div class="row justify-content-center">
-        {% block content %}
-            {% for model in models %}
-                <div class="col-md-4 mb-4">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ model.name }}
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="{{ model.add_url }}">Add {{ model.name }}</a>
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Edit {{ model.name }}</h6>
-                            {% for instance in model.instances %}
-                                <a class="dropdown-item"
-                                   href="{{ instance.edit_url }}">ID: {{ instance.title|truncatewords:15 }}</a>
-                            {% endfor %}
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Delete {{ model.name }}</h6>
-                            {% for instance in model.instances %}
-                                <a class="dropdown-item"
-                                   href="{{ instance.delete_url }}">ID: {{ instance.title|truncatewords:15 }}</a>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                </div>
-            {% endfor %}
-        {% endblock %}
+<body>
+<div class="app-wrap" id="app">
+  <nav class="nav-bar d-flex justify-content-between align-items-center">
+    <div class="brand">
+      <span class="dot"></span>
+      <span>
+        {% if request.user.get_full_name %}
+          {{ request.user.get_full_name }}
+        {% else %}
+          {{ request.user.username }}
+        {% endif %}
+      </span>
     </div>
+    <div class="toolbar">
+      <div class="search">
+        <input id="searchInput" class="form-control form-control-sm" type="search" placeholder="جست‌وجوی مدل‌ها..." aria-label="Search models">
+        <i class="bi bi-search"></i>
+      </div>
+      <button id="themeToggle" class="btn btn-sm toggle" type="button" aria-label="تغییر تم">
+        <i class="bi bi-moon-stars" id="themeIcon"></i>
+        <span class="d-none d-sm-inline">تم</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="content">
+    <div class="header">
+      <div>
+        <h1>داشبورد مدیریت</h1>
+        <div class="sub">مدیریت آسان داده‌ها و محتوا</div>
+      </div>
+      <span class="badge-soft" id="countBadge">—</span>
+    </div>
+
+    <div class="grid" id="modelsGrid">
+      {% block content %}
+      {% for model in models %}
+      <div class="col-card model-col" data-name="{{ model.display_name |lower }}">
+        <section class="cardx" tabindex="0" aria-labelledby="title-{{ forloop.counter0 }}">
+          <div class="title">
+            <div id="title-{{ forloop.counter0 }}">{{ model.display_name  }}</div>
+            <span class="badge-soft"><i class="bi bi-collection me-1"></i>{% with model.instances|length as l %}{{ l }} مورد{% endwith %}</span>
+          </div>
+
+          <div class="card-actions">
+            <a class="btn btn-primaryx btn-sm flex-fill d-flex align-items-center justify-content-center gap-2 text-truncate"
+               href="{{ model.add_url }}"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="افزودن {{ model.display_name }}">
+              <i class="bi bi-plus-lg"></i>
+              <span class="text-truncate">{{ model.display_name }}</span>
+            </a>
+
+            <div class="dropdown flex-fill">
+              <button class="btn btn-ghost btn-sm w-100 d-flex align-items-center justify-content-center gap-2"
+                      type="button"
+                      id="editDropdown-{{ forloop.counter0 }}"
+                      data-bs-toggle="dropdown"
+                      data-bs-boundary="viewport"
+                      data-bs-offset="0,8"
+                      aria-expanded="false">
+                <i class="bi bi-pencil-square"></i> ویرایش
+                <i class="bi bi-chevron-down ms-1"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end"
+                   aria-labelledby="editDropdown-{{ forloop.counter0 }}"
+                   role="menu">
+                <div class="menu-head"><span><i class="bi bi-pencil me-1"></i> ویرایش {{ model.display_name  }}</span></div>
+                <div class="menu-body">
+                  <div class="list-scroll">
+                    <ul class="list-unstyled m-0">
+                      {% for instance in model.instances %}
+                        <li>
+                          <a class="menu-item dropdown-item" href="{{ instance.edit_url }}">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span>{{ instance.title|truncatewords:15 }}</span>
+                          </a>
+                        </li>
+                      {% empty %}
+                        <li class="menu-empty"><i class="bi bi-exclamation-triangle"></i> موردی وجود ندارد</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dropdown flex-fill">
+              <button class="btn btn-ghost btn-sm w-100 d-flex align-items-center justify-content-center gap-2"
+                      type="button"
+                      id="delDropdown-{{ forloop.counter0 }}"
+                      data-bs-toggle="dropdown"
+                      data-bs-boundary="viewport"
+                      data-bs-offset="0,8"
+                      aria-expanded="false">
+                <i class="bi bi-trash3"></i> حذف
+                <i class="bi bi-chevron-down ms-1"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end"
+                   aria-labelledby="delDropdown-{{ forloop.counter0 }}"
+                   role="menu">
+                <div class="menu-head"><span><i class="bi bi-trash me-1"></i> حذف {{ model.display_name  }}</span></div>
+                <div class="menu-body">
+                  <div class="list-scroll">
+                    <ul class="list-unstyled m-0">
+                      {% for instance in model.instances %}
+                        <li>
+                          <a class="menu-item dropdown-item" href="{{ instance.delete_url }}">
+                            <i class="bi bi-x-octagon"></i>
+                            <span>{{ instance.title|truncatewords:15 }}</span>
+                          </a>
+                        </li>
+                      {% empty %}
+                        <li class="menu-empty"><i class="bi bi-exclamation-triangle"></i> موردی وجود ندارد</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+      {% endfor %}
+      {% endblock %}
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>© {% now "Y" %} - Erfan Yaghoblo </span>
+  </footer>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    $(document).ready(function () {
-        $('.dropdown-toggle').dropdown();
+  (function () {
+    const root = document.documentElement, btn = document.getElementById('themeToggle'), icon = document.getElementById('themeIcon');
+    function setTheme(mode){
+      if(mode==='light'){root.setAttribute('data-theme','light');icon.classList.remove('bi-moon-stars');icon.classList.add('bi-sun');}
+      else{root.removeAttribute('data-theme');icon.classList.remove('bi-sun');icon.classList.add('bi-moon-stars');}
+      localStorage.setItem('ui-theme',mode);
+    }
+    const saved = localStorage.getItem('ui-theme');
+    setTheme(saved==='light'||saved==='dark'?saved:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+    btn.addEventListener('click',()=>setTheme(root.getAttribute('data-theme')==='light'?'dark':'light'));
 
-        $('.dropdown-menu').on('click', function (event) {
-            event.stopPropagation();
+    const input=document.getElementById('searchInput');
+    const cols=[...document.querySelectorAll('.model-col')];
+    const badge=document.getElementById('countBadge');
+    function applyFilter(){
+      const q=(input.value||'').trim().toLowerCase(); let visible=0;
+      cols.forEach(col=>{
+        const name=col.getAttribute('data-name')||'';
+        const match=!q||name.includes(q);
+        col.style.display=match?'':'none'; if(match) visible++;
+      });
+      badge.textContent=q?`${visible} نتیجه`:`${cols.length} مدل`;
+    }
+    input.addEventListener('input',applyFilter); applyFilter();
+
+    document.querySelectorAll('.dropdown').forEach(dd=>{
+      dd.addEventListener('show.bs.dropdown', (e)=>{
+        const card = e.target.closest('.cardx');
+        card?.classList.add('opening');
+        document.querySelectorAll('.dropdown.show').forEach(opened=>{
+          if(opened!==dd){
+            bootstrap.Dropdown.getInstance(opened.querySelector('[data-bs-toggle="dropdown"]'))?.hide();
+          }
         });
+      });
+      dd.addEventListener('hide.bs.dropdown', (e)=>{
+        const card = e.target.closest('.cardx');
+        setTimeout(()=>card?.classList.remove('opening'), 150);
+      });
     });
-</script>
 
+    document.querySelectorAll('.cardx').forEach(card=>{
+      card.addEventListener('keydown',(e)=>{
+        const editBtn = card.querySelector('[id^="editDropdown-"]');
+        const delBtn  = card.querySelector('[id^="delDropdown-"]');
+        if(e.key==='Enter' && !e.ctrlKey && editBtn){ e.preventDefault(); editBtn.click(); }
+        else if(e.key==='Enter' && e.ctrlKey && delBtn){ e.preventDefault(); delBtn.click(); }
+      });
+    });
+  })();
+
+  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+    new bootstrap.Tooltip(el);
+  });
+</script>
 </body>
 </html>

@@ -3,9 +3,7 @@ from django.http import JsonResponse, HttpRequest, Http404
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic import CreateView
 
-from core.forms import CustomUserCreationForm
 from core.models import CustomUser
 from .forms import (ContactForm, AboutMeForm, SocialMediaForm, AbilityForm, ServicesForm, PortfolioForm,
                     ExperiencesForm, EducationForm)
@@ -31,6 +29,7 @@ from .models import *
 
 def profile_view(request):
     superuser = get_object_or_404(CustomUser, username=settings.USERNAME_FOR_FILTER, is_superuser=True)
+    user = User.objects.filter(user=superuser).first()
     about_me = AboutMe.objects.filter(user=superuser).first()
     abilities = Abilities.objects.filter(user=superuser)
     services = Services.objects.filter(user=superuser)
@@ -50,7 +49,7 @@ def profile_view(request):
         else:
             return JsonResponse({'success': False})
 
-    context = {'custom_user': superuser, 'about_me': about_me, 'abilities': abilities, 'services': services,
+    context = {'custom_user': superuser, 'user': user, 'about_me': about_me, 'abilities': abilities, 'services': services,
                'portfolios': portfolios, 'categories': categories, 'experiences': experiences, 'educations': educations,
                'social_medias': social_medias, 'contact_form': contact_form, }
 
@@ -72,15 +71,31 @@ def custom_404_view(request, exception):
 
 @superuser_required
 def dashboard(request):
+    DISPLAY_LABELS = {
+        Abilities:    "مهارت‌ها",
+        AboutMe:      "درباره من",
+        Services:     "خدمات",
+        Portfolio:    "نمونه‌کارها",
+        Experiences:  "تجربیات",
+        Education:    "تحصیلات",
+        SocialMedias: "شبکه‌های اجتماعی",
+    }
+
     models_dashboard = []
     models = [Abilities, AboutMe, Services, Portfolio, Experiences, Education, SocialMedias]
+
     for model_class in models:
         model_name = model_class.__name__
-        model_instances = model_class.objects.all().order_by('-percent') if model_class == Abilities \
-            else model_class.objects.all()
-        if model_instances.exists():
+        display_name = DISPLAY_LABELS.get(
+            model_class,
+            getattr(model_class._meta, "verbose_name", model_name)
+        )
+
+        qs = model_class.objects.all().order_by('-percent') if model_class == Abilities else model_class.objects.all()
+
+        if qs.exists():
             instances_data = []
-            for instance in model_instances:
+            for instance in qs:
                 if model_class == AboutMe:
                     display_value = instance.user.username
                 elif model_class == SocialMedias:
@@ -88,24 +103,30 @@ def dashboard(request):
                 else:
                     first_field_name = model_class._meta.fields[2].name
                     display_value = getattr(instance, first_field_name)
+
                 instances_data.append({
                     'id': instance.pk,
                     'title': display_value,
                     'edit_url': reverse(f'{model_name.lower()}-update', kwargs={'pk': instance.pk}),
                     'delete_url': reverse(f'{model_name.lower()}-delete', kwargs={'pk': instance.pk}),
                 })
+
             models_dashboard.append({
-                'name': model_name,
+                'name': model_name,             
+                'display_name': display_name,
                 'instances': instances_data,
                 'add_url': reverse(f'{model_name.lower()}'),
             })
         else:
             models_dashboard.append({
                 'name': model_name,
+                'display_name': display_name,
                 'instances': None,
                 'add_url': reverse(f'{model_name.lower()}'),
             })
+
     return render(request, 'main/admins.html', {'models': models_dashboard})
+
 
 
 class SuperuserRequiredMixin(UserPassesTestMixin):
@@ -134,7 +155,7 @@ class AbilityUpdateView(SuperuserRequiredMixin, generic.UpdateView):
 
 
 class AbilityDeleteView(SuperuserRequiredMixin, generic.DeleteView):
-    model = AbilityForm
+    model = Abilities
     template_name = 'forms/abilities-delete.html'
     success_url = reverse_lazy('admin')
 
@@ -269,9 +290,3 @@ class SocialMediasDeleteView(SuperuserRequiredMixin, generic.DeleteView):
     model = SocialMedias
     template_name = 'forms/social-medias-delete.html'
     success_url = reverse_lazy('admin')
-
-
-class SignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'

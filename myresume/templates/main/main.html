@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Profession - Personal Portfolio Template</title>
+    <title>ErfanCV</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Profession is Personal Portfolio Template">
     <meta name="keywords"
@@ -17,6 +17,8 @@
 
     <!-- CSS Files
     ================================================== -->
+    <link rel="icon" type="image/png" href="{% static 'images/misc/EYY_prev_ui.png' %}">
+
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}" type="text/css">
@@ -31,6 +33,22 @@
     <!-- color scheme -->
     <link rel="stylesheet" href="{% static 'css/colors/scheme-6.css' %}" type="text/css">
 </head>
+<style>
+    .hero-image{
+    display:block;
+    max-width:50% !important;
+    width:50% !important;
+    height:auto !important;
+    margin-inline:auto;
+    object-fit:contain;
+    }
+
+    {% comment %} @media (max-width: 576px){
+    #section-hero-5.full-height{min-height:auto;}/
+    .spacer-double{height:24px;}
+    } {% endcomment %}
+
+</style>
 
 <body id="homepage" class="side-content side-layout">
 
@@ -110,11 +128,13 @@
                             {% if request.user.is_authenticated %}
                                 <li>
                                     {% if request.user.is_superuser %}
-                                        <b>Hi, {{ request.user.first_name }}! welcome home ;)</b>
+                                        <b>Hi, {{ request.user.first_name|default:request.user.username }}! welcome home
+                                            ;)</b>
                                         <br>
                                         <a href="{% url 'admin' %}">Your Panel</a>
                                     {% else %}
-                                        Hi, {{ request.user.first_name }}! welcome to my site ;)
+                                        Hi, {{ request.user.first_name|default:request.user.username }}! welcome to my
+                                        site ;)
                                     {% endif %}
                                     <form method="POST" action="{% url 'logout' %}">
                                         {% csrf_token %}
@@ -126,7 +146,7 @@
                                     <br>
                                 </li>
                             {% else %}
-{#                                <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign Up</a>#}
+                                {#                                <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign Up</a>#}
                                 <button type="submit" class="btn btn-link"
                                         style="padding: 0; border: none; background: none; color: #ffb736;"
                                         onclick="window.location.href='{% url 'login' %}'">Login
@@ -172,7 +192,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="spacer-double"></div>
 
-                                    <img src="{% static 'images/misc/EYY_prev_ui.png' %}" alt="">
+                                    <img src="{% static 'images/misc/EYY_prev_ui.png' %}" alt="" class="hero-image">
                                     <div class="spacer-double"></div>
 
                                 </div>
@@ -323,7 +343,7 @@
                                 <!-- gallery item -->
                                 <div class="item {{ portfolio.category }} gallery-item">
                                     <div class="picframe wow">
-                                        <a class="image-popup" href="{{ portfolio.image_project.url }}">
+                                        <a class="image-popup" href="{{ portfolio.link_project }}">
                                     <span class="overlay">
                                         <span class="pf_text">
                                             <span class="project-name">{{ portfolio.project }}</span>
@@ -357,7 +377,9 @@
                                     <h2>Experiences</h2>
                                     {% for experience in experiences %}
                                         <div class="exp-box">
-                                            <h5>{{ experience.start_year }} - {{ experience.end_year }}</h5>
+                                            <h5>{{ experience.start_year }} -
+                                                {% if experience.end_year %}{{ experience.end_year }}{% else %}
+                                                    Now{% endif %}</h5>
                                             <h3>{{ experience.title }}</h3>
                                             <p>{{ experience.description }}</p>
                                         </div>
@@ -370,7 +392,9 @@
                                     <h2>Education</h2>
                                     {% for education in educations %}
                                         <div class="exp-box">
-                                            <h5>{{ education.start_year }} - {{ education.end_year }}</h5>
+                                            <h5>{{ education.start_year }} -
+                                                {% if education.end_year %}{{ education.end_year }}{% else %}
+                                                    Now{% endif %}</h5>
                                             <h3>{{ education.title }}</h3>
                                             <p>{{ education.description }}</p>
                                         </div>

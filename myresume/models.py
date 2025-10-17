@@ -82,6 +82,7 @@ class Portfolio(models.Model):
     ]
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     project = models.CharField(max_length=255, null=True, blank=True)
+    link_project = models.URLField(null=True, blank=True)
     image_project = ResizedImageField(upload_to='images/', size=[1000, 667], crop=['middle', 'center'])
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='all_projects')
 
