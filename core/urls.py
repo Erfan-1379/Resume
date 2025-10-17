@@ -1,6 +1,5 @@
 from django.urls import path
 
-from myresume.views import SignUpView
 from django.contrib.auth import views as auth_views
 from .views import SignUpView
 
